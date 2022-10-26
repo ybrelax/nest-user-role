@@ -3,7 +3,7 @@
  * @Description: 数据库链接配置
  */
 
-import { User } from 'src/user-center/user/entities/user.mysql.entity';
+import { User } from 'src/user-center/user/provider/user.mysql.entity';
 import { getConfig } from 'src/utils';
 import { DataSource } from 'typeorm';
 
@@ -20,7 +20,8 @@ export const DatabaseProviders = [
   {
     provide: 'MYSQL_DATA_SOURCE',
     useFactory: async () => {
-      if (!MYSQL_DATA_SOURCE.initialize) await MYSQL_DATA_SOURCE.initialize();
+      if (!MYSQL_DATA_SOURCE.isInitialized)
+        await MYSQL_DATA_SOURCE.initialize();
       return MYSQL_DATA_SOURCE;
     },
   },
