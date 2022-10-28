@@ -3,7 +3,7 @@
  * @Description: 数据库链接配置
  */
 
-import { User } from 'src/user-center/user/provider/user.mysql.entity';
+import { User } from 'src/user-center/user/provide/user.mysql.entity';
 import { getConfig } from 'src/utils';
 import { DataSource } from 'typeorm';
 
