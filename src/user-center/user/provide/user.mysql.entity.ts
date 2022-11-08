@@ -21,12 +21,12 @@ export class User {
   email: string;
 
   @UpdateDateColumn({
-    name: 'update-date',
+    name: 'update_date',
   })
   updateDate?: string;
 
   @CreateDateColumn({
-    name: 'create-date',
+    name: 'create_date',
   })
   createDate?: string;
 }
