@@ -6,3 +6,12 @@ content-type: application/json
     "name": "samplexxxx",
     "time": "xx"
 }
+
+POST http://localhost:3000/privilege/list/paginate HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "name": "samplexxxx",
+    "time": "xx"
+}

@@ -24,7 +24,22 @@ export class BusinessException extends HttpException {
 
   static throwForbidden() {
     throw new BusinessException({
-        code: BUSINESS_ERROR_CODE.PERMISSION_DISABLED
-    })
+      code: BUSINESS_ERROR_CODE.PERMISSION_DISABLED,
+      message: '抱歉哦，您无此权限！',
+    });
+  }
+
+  static throwPermissionDisabled() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.PERMISSION_DISABLED,
+      message: '权限已禁用',
+    });
+  }
+
+  static throwUserDisabled() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.USER_DISABLED,
+      message: '用户已经冻结',
+    });
   }
 }

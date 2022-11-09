@@ -1,9 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
+import { PaginationParams } from 'types/type';
 
 export class CreatePrivilegeDto {
   @IsNotEmpty()
   name: string;
   description?: string;
+  status?: number;
 }
 
 export class UpdatePrivilegeDto {
@@ -11,6 +13,7 @@ export class UpdatePrivilegeDto {
   id: number;
   name?: string;
   description?: string;
+  status?: number;
 }
 
 export class ChangePrivilegeStatusDto {
@@ -19,4 +22,13 @@ export class ChangePrivilegeStatusDto {
 
   @IsNotEmpty()
   status: number;
+}
+
+export class DeletePrivilegeDto {
+  @IsNotEmpty()
+  privilegeId: number;
+}
+
+export class PrivilegeListWidthPaginateDto extends PaginationParams {
+  keyword?: string;
 }
