@@ -25,6 +25,8 @@ export class Privilege {
   @Column({ default: PrivilegeStatus.ALLOW })
   status: PrivilegeStatus;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false,
+  })
   createDate: string;
 }
