@@ -1,4 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
+import { CreateUserDto } from './provide/user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -9,6 +10,11 @@ export class UserController {
   profile(@Body() user: Payload) {
     return this.userService.profile(user.userId);
   }
+
+  @Post('register')
+  register(@Body() createUser: CreateUserDto) {
+     return this.userService.register(createUser);
+   }
 
   @Post('/list')
   findUserList() {
