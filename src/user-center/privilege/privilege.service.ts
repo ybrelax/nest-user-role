@@ -41,26 +41,12 @@ export class PrivilegeService {
     const { current, pageSize, ...searchParams } = params;
     const queryBuilder =
       this.privilegeRepository.createQueryBuilder('privilege');
-    queryBuilder.select('privilege');
-    // queryBuilder.addSelect(
-    //   "DATE_FORMAT(privilege.createDate,'%Y-%m-%d %H:%i:%s') createDate",
-    // );
-    //.select('privilege.id', 'sum');
-    // .getRawOne();
-    // .select(
-    //   "*, DATE_FORMAT(privilege.createDate,'%Y-%m-%d %H:%i:%s') createDate",
-    // );
-    // .orderBy('privilege.createDate', 'DESC');
-    // const data = await queryBuilder.getRawMany();
-    // console.log('data:', data);
-    // return queryBuilder.getMany();
-    return queryBuilder.getRawMany();
+    queryBuilder.orderBy('privilege.createDate', 'DESC');
     if (isNotEmpty(searchParams.keyword)) {
       queryBuilder.andWhere('privilege.name like :name', {
         name: `%${searchParams.keyword}%`,
       });
     }
-
     return paginateRaw<Privilege, CustomPaginationMeta>(
       queryBuilder,
       getPaginationOptions({ current, pageSize }),

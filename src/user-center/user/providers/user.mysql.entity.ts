@@ -1,13 +1,11 @@
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  CreateDateColumn,
-  BeforeInsert
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+
+export enum UserStatus {
+  disabled = 0,
+  enabled = 1,
+}
 
 @Entity('user')
 export class User {
@@ -18,22 +16,24 @@ export class User {
   username: string; // 用户名
 
   @Column({ length: 100 })
-  nickname: string;  //昵称
+  nickname: string; //昵称
 
-  @Exclude()  // 序列化实现 过滤所有返回数据
+  @Exclude() // 序列化实现 过滤所有返回数据
   // @Column({select: false}) // 只是进行查询的时候起作用
   @Column()
-  password: string;  // 密码
-
+  password: string; // 密码
 
   @Column()
-  avatar: string;   //头像
+  avatar: string; //头像
 
   @Column()
   email: string;
 
   @Column('simple-enum', { enum: ['root', 'author', 'visitor'] })
-  role_id: string;   // 用户角色
+  role_id: string; // 用户角色
+
+  @Column({ default: UserStatus.enabled })
+  status?: UserStatus;
 
   @Column({
     name: 'create_time',
@@ -48,10 +48,9 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updateTime: Date;
-  
-  @BeforeInsert() 
-  async encryptPwd() { 
-    this.password = await bcrypt.hashSync(this.password); 
-  } 
 
+  @BeforeInsert()
+  async encryptPwd?() {
+    this.password = await bcrypt.hashSync(this.password);
+  }
 }

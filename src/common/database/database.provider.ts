@@ -4,7 +4,7 @@
  */
 
 import { Privilege } from 'src/user-center/privilege/provide/privilege.entity.mysql';
-import { User } from 'src/user-center/user/provide/user.mysql.entity';
+import { User } from 'src/user-center/user/providers/user.mysql.entity';
 import { getConfig } from 'src/utils';
 import { DataSource } from 'typeorm';
 
