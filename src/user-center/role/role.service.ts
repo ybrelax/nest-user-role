@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { isNotEmpty } from 'class-validator';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { BusinessException } from 'src/common/exceptions/business.exception';
 import { CustomPaginationMeta, getPaginationOptions } from 'src/helper';
 import { In, Repository } from 'typeorm';
 import { PaginationParams } from 'types/type';
 import { RolePrivilegeService } from '../role-privilege/role-privilege.service';
-import { CreateRoleDto, RoleListWithPaginationDto } from './providers/role.dto';
-import { Role } from './providers/role.entity.mysql';
+import { CreateRoleDto, RoleListWidthPaginateDto, UpdateRoleDto } from './providers/role.dto';
+import { Role } from './providers/role.entity';
 
 @Injectable()
 export class RoleService {
@@ -20,7 +21,11 @@ export class RoleService {
     return this.roleRepository.save(dto);
   }
 
-  update(dto: Role) {
+  async update(dto: UpdateRoleDto) {
+    const found = await this.findByid(dto.id);
+    if (!found) {
+      throw new BusinessException('未找到角色');
+    }
     return this.roleRepository.save(dto);
   }
 
@@ -31,7 +36,7 @@ export class RoleService {
   }
 
   findByid(id) {
-    return this.roleRepository.findOneBy(id);
+    return this.roleRepository.findOneBy({ id });
   }
 
   findByIds(ids: number[]) {
@@ -43,7 +48,7 @@ export class RoleService {
   }
 
   async paginate(
-    searchParams: RoleListWithPaginationDto,
+    searchParams: RoleListWidthPaginateDto,
     page: PaginationParams,
   ): Promise<Pagination<Role, CustomPaginationMeta>> {
     const queryBuilder = this.roleRepository.createQueryBuilder('role');
@@ -55,7 +60,10 @@ export class RoleService {
         name: `%${searchParams.keyword}%`,
       });
     }
-
     return paginate<Role, CustomPaginationMeta>(queryBuilder, getPaginationOptions(page));
+  }
+
+  list() {
+    return this.roleRepository.find();
   }
 }

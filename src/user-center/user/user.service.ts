@@ -16,7 +16,7 @@ import { RolePrivilegeService } from '../role-privilege/role-privilege.service';
 import { RoleService } from '../role/role.service';
 import { UserRoleService } from '../user-role/user-role.service';
 import { CreateUserDto, UserPaginationDto } from './providers/user.dto';
-import { User } from './providers/user.mysql.entity';
+import { User } from './providers/user.entity';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Injectable()
@@ -66,7 +66,7 @@ export class UserService {
   async getPrivilegeByUserId(userId: number) {
     const userRoleList = await this.userRoleService.findListByUserId(userId);
     const roleIds = userRoleList.map((i) => i.id);
-    const rolePrivilegeList = await this.rolePrivilegeService.findListByRoleIds(roleIds);
+    const rolePrivilegeList = await this.rolePrivilegeService.listByRoleIds(roleIds);
     const privilegeIds = rolePrivilegeList.map((r) => r.id);
     const privilegeList = await this.privilegeService.findByIds([...new Set(privilegeIds)]);
     return privilegeList;
@@ -82,6 +82,12 @@ export class UserService {
   getUserById(id: number) {
     return this.userRepository.findOne({
       where: { id },
+    });
+  }
+
+  getUserByUsername(username: string) {
+    return this.userRepository.findOne({
+      where: { username },
     });
   }
 

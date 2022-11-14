@@ -2,28 +2,24 @@
  * @Author: yaobo
  * @Description: 数据库链接配置
  */
-
-import { Privilege } from 'src/user-center/privilege/provide/privilege.entity.mysql';
-import { User } from 'src/user-center/user/providers/user.mysql.entity';
-import { getConfig } from 'src/utils';
+import * as path from 'path';
 import { DataSource } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
-const { MYSQL_CONFIG } = getConfig();
-
-const MYSQL_DATABASE_CONFIG = {
-  ...MYSQL_CONFIG,
-  entities: [User, Privilege],
-};
-
-const MYSQL_DATA_SOURCE = new DataSource(MYSQL_DATABASE_CONFIG);
 // 数据库注入
 export const DatabaseProviders = [
   {
+    // mysql 数据库注入
+    inject: [ConfigService],
     provide: 'MYSQL_DATA_SOURCE',
-    useFactory: async () => {
-      if (!MYSQL_DATA_SOURCE.isInitialized)
-        await MYSQL_DATA_SOURCE.initialize();
-      return MYSQL_DATA_SOURCE;
+    useFactory: async (configService: ConfigService) => {
+      const mysqlConfig = configService.get('MYSQL_CONFIG');
+      const mysqlDataSource = new DataSource({
+        ...mysqlConfig,
+        entities: [path.join(__dirname, `../../**/*.entity{.ts,.js}`)],
+      });
+      if (!mysqlDataSource.isInitialized) await mysqlDataSource.initialize();
+      return mysqlDataSource;
     },
   },
 ];

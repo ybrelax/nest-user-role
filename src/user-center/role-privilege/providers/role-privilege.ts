@@ -1,4 +1,4 @@
-import { RolePrivilege } from './role-privilege.mysql.entity';
+import { RolePrivilege } from './role-privilege.entity';
 
 // 数据库注入
 export const RolePrivilegeProviders = [

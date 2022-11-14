@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
-import { RolePrivilege } from './providers/role-privilege.mysql.entity';
+import { RolePrivilege } from './providers/role-privilege.entity';
 
 @Injectable()
 export class RolePrivilegeService {
@@ -9,7 +9,7 @@ export class RolePrivilegeService {
     private rolePrivilegeRepository: Repository<RolePrivilege>,
   ) {}
 
-  findListByRoleIds(roleIds: number[]) {
+  listByRoleIds(roleIds: number[]) {
     return this.rolePrivilegeRepository.find({
       where: {
         roleId: In(roleIds),

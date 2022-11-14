@@ -1,4 +1,4 @@
-import { User } from './user.mysql.entity';
+import { User } from './user.entity';
 
 // 数据库注入
 export const UserProviders = [

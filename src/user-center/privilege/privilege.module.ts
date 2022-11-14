@@ -8,5 +8,6 @@ import { PrivilegeProviders } from './provide/privilege.providers';
   imports: [DatabaseModule],
   controllers: [PrivilegeController],
   providers: [PrivilegeService, ...PrivilegeProviders],
+  exports: [PrivilegeService],
 })
 export class PrivilegeModule {}

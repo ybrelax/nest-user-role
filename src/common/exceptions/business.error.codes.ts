@@ -15,4 +15,7 @@ export const BUSINESS_ERROR_CODE = {
 
   // 用户已冻结
   USER_DISABLED: 1004,
+
+  // 未授权
+  UNAUTHORIZED: -1,
 };

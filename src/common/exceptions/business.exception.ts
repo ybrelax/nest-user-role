@@ -42,4 +42,11 @@ export class BusinessException extends HttpException {
       message: '用户已经冻结',
     });
   }
+
+  static throwUnAuthorized() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.UNAUTHORIZED,
+      message: '请求未经授权',
+    });
+  }
 }

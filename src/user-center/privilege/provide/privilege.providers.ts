@@ -1,4 +1,4 @@
-import { Privilege } from './privilege.entity.mysql';
+import { Privilege } from './privilege.entity';
 
 export const PrivilegeProviders = [
   {

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user')
+@Entity('role_privilege')
 export class RolePrivilege {
   @PrimaryGeneratedColumn()
   id?: number;

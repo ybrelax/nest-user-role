@@ -1,40 +1,64 @@
+import { Controller, Post, Body } from '@nestjs/common';
+import { PrivilegeService } from '../privilege/privilege.service';
+import { RolePrivilegeService } from '../role-privilege/role-privilege.service';
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+  CreateRoleDto,
+  DeleteRoleDto,
+  GetPrivilegeListByIdDto,
+  UpdateRoleDto,
+  RoleListWidthPaginateDto,
+  RolePrivilegeSetDto,
+} from './providers/role.dto';
 import { RoleService } from './role.service';
 
 @Controller('role')
 export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(
+    private readonly roleService: RoleService,
+    private readonly rolePrivilegeService: RolePrivilegeService,
+    private readonly privilegeService: PrivilegeService,
+  ) {}
 
-  @Post()
-  create(@Body() createRoleDto: any) {
-    return this.roleService.create(createRoleDto);
+  @Post('create')
+  create(@Body() dto: CreateRoleDto) {
+    return this.roleService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.roleService.findAll();
+  @Post('update')
+  update(@Body() dto: UpdateRoleDto) {
+    return this.roleService.update(dto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roleService.findOne(+id);
+  @Post('delete')
+  delete(@Body() dto: DeleteRoleDto) {
+    return this.roleService.delete(dto.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: any) {
-    return this.roleService.update(+id, updateRoleDto);
+  @Post('list')
+  list() {
+    return this.roleService.list();
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roleService.remove(+id);
+  // 根据角色Id查询权限列表
+  @Post('/getPrivilegeListById')
+  async getPrivilegeListById(@Body() dto: GetPrivilegeListByIdDto) {
+    const rolePrivilegeList = await this.rolePrivilegeService.listByRoleIds([dto.roleId]);
+    const privilegeList = await this.privilegeService.findByIds(
+      rolePrivilegeList.map((rp) => rp.id),
+    );
+    return privilegeList;
+  }
+
+  @Post('/list/paginate')
+  async listWidthPaginate(@Body() dto: RoleListWidthPaginateDto) {
+    const { page, ...searchParams } = dto;
+    return this.roleService.paginate(searchParams, page);
+  }
+
+  // 设置角色权限
+  @Post('/setRolePrivilege')
+  async setRolePrivilege(@Body() dto: RolePrivilegeSetDto) {
+    await this.rolePrivilegeService.deleteByRoleId(dto.id);
+    return this.rolePrivilegeService.save(dto.id, dto.privilegeIds);
   }
 }

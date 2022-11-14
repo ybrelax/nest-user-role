@@ -3,12 +3,8 @@ import { isNotEmpty } from 'class-validator';
 import { paginateRaw } from 'nestjs-typeorm-paginate';
 import { CustomPaginationMeta, getPaginationOptions } from 'src/helper';
 import { In, Repository } from 'typeorm';
-import {
-  CreatePrivilegeDto,
-  PrivilegeListWidthPaginateDto,
-  UpdatePrivilegeDto,
-} from './provide/privilege.dto';
-import { Privilege } from './provide/privilege.entity.mysql';
+import { PrivilegeListWidthPaginateDto } from './provide/privilege.dto';
+import { Privilege } from './provide/privilege.entity';
 
 @Injectable()
 export class PrivilegeService {
@@ -17,7 +13,7 @@ export class PrivilegeService {
     private privilegeRepository: Repository<Privilege>,
   ) {}
 
-  createOrUpdate(params: CreatePrivilegeDto | UpdatePrivilegeDto) {
+  createOrUpdate(params: Privilege) {
     return this.privilegeRepository.save(params);
   }
 
@@ -39,8 +35,7 @@ export class PrivilegeService {
 
   async paginate(params: PrivilegeListWidthPaginateDto) {
     const { current, pageSize, ...searchParams } = params;
-    const queryBuilder =
-      this.privilegeRepository.createQueryBuilder('privilege');
+    const queryBuilder = this.privilegeRepository.createQueryBuilder('privilege');
     queryBuilder.orderBy('privilege.createDate', 'DESC');
     if (isNotEmpty(searchParams.keyword)) {
       queryBuilder.andWhere('privilege.name like :name', {
@@ -51,5 +46,9 @@ export class PrivilegeService {
       queryBuilder,
       getPaginationOptions({ current, pageSize }),
     );
+  }
+
+  list() {
+    return this.privilegeRepository.find();
   }
 }

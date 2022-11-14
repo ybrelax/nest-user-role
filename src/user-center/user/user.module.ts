@@ -6,11 +6,13 @@ import { UserProviders } from './providers/user.providers';
 import { RolePrivilegeModule } from '../role-privilege/role-privilege.module';
 import { RoleModule } from '../role/role.module';
 import { PrivilegeModule } from '../privilege/privilege.module';
+import { UserRoleModule } from '../user-role/user-role.module';
+import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 
 @Module({
-  imports: [DatabaseModule, RolePrivilegeModule, RoleModule, PrivilegeModule],
+  imports: [DatabaseModule, UserRoleModule, RolePrivilegeModule, RoleModule, PrivilegeModule],
   controllers: [UserController],
   providers: [...UserProviders, UserService],
-  exports: [UserService],
+  exports: [...UserProviders, UserService],
 })
 export class UserModule {}

@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { BusinessException } from 'src/common/exceptions/business.exception';
 import { UserRoleService } from '../user-role/user-role.service';
 import {
@@ -10,6 +11,7 @@ import {
 } from './providers/user.dto';
 import { UserService } from './user.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(
@@ -27,6 +29,7 @@ export class UserController {
     return this.userService.register(createUser);
   }
 
+  // 更改用户状态
   @Post('changeStatus')
   async changeStatus(@Body() dto: DisableUserDto) {
     const found = await this.userService.getUserById(dto.userId);
@@ -37,16 +40,18 @@ export class UserController {
   }
 
   @Post('/list/paginate')
-  async getLisPagination(dto: UserPaginationDto) {
+  async listWidthPaginate(dto: UserPaginationDto) {
     const { page, ...searchParams } = dto;
     return this.userService.paginate(searchParams, page);
   }
 
+  // 根据用户Id获取用户角色
   @Post('/getRolesById')
   getRolesById(@Body() dto: GetRolesByIdDto) {
     return this.userService.getRolesById(dto.userId);
   }
 
+  // 设置用户角色
   @Post('setRoles')
   async setRoles(@Body() dto: setRolesDto) {
     return await this.userRoleService.setUserRoles(dto.userId, dto.roleIds);

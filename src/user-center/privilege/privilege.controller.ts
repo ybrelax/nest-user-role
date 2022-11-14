@@ -8,6 +8,7 @@ import {
   DeletePrivilegeDto,
   PrivilegeListWidthPaginateDto,
 } from './provide/privilege.dto';
+import { Privilege } from './provide/privilege.entity';
 
 @Controller('privilege')
 export class PrivilegeController {
@@ -15,20 +16,34 @@ export class PrivilegeController {
 
   @Post('create')
   async create(@Body() dto: CreatePrivilegeDto) {
-    return this.privilegeService.createOrUpdate(dto);
+    const privilege: Privilege = {
+      name: dto.name,
+      action: dto.action,
+      description: dto.description,
+    };
+    return this.privilegeService.createOrUpdate(privilege);
   }
 
   @Post('update')
   async update(@Body() dto: UpdatePrivilegeDto) {
-    return this.privilegeService.createOrUpdate(dto);
+    const updatedPrivilege: Privilege = {
+      name: dto.name,
+      action: dto.action,
+      description: dto.description,
+    };
+
+    const privilege = await this.privilegeService.findById(dto.id);
+    if (!privilege) {
+      throw new BusinessException(`未找到id为${dto.id}的权限`);
+    }
+
+    return this.privilegeService.createOrUpdate({ ...privilege, ...updatedPrivilege });
   }
 
   // 修改权限状态
-  @Post('change-status')
+  @Post('changeStatus')
   async changeStatus(@Body() dto: ChangePrivilegeStatusDto) {
-    const privilegeInstance = await this.privilegeService.findById(
-      dto.privilegeId,
-    );
+    const privilegeInstance = await this.privilegeService.findById(dto.privilegeId);
     if (!privilegeInstance) {
       throw new BusinessException(`未找到id为${dto.privilegeId}}的权限`);
     }
@@ -47,5 +62,10 @@ export class PrivilegeController {
   async listWidthPaginate(@Body() dto: PrivilegeListWidthPaginateDto) {
     const pageData = await this.privilegeService.paginate(dto);
     return pageData;
+  }
+
+  @Post('/list')
+  list() {
+    return this.privilegeService.list();
   }
 }

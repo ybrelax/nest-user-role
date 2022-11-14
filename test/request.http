@@ -16,3 +16,15 @@ content-type: application/json
     "name": "samplexxxx",
     "time": "xx"
 }
+###
+
+
+
+###
+
+POST http://localhost:3000/user/register HTTP/1.1
+content-type: application/json
+{
+    "username": "yaobo1",
+    "password": "xx"
+}
