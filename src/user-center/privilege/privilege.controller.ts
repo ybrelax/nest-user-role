@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { BusinessException } from 'src/common/exceptions/business.exception';
 import { PrivilegeService } from './privilege.service';
 import {
@@ -10,6 +11,7 @@ import {
 } from './provide/privilege.dto';
 import { Privilege } from './provide/privilege.entity';
 
+@UseGuards(JwtAuthGuard)
 @Controller('privilege')
 export class PrivilegeController {
   constructor(private readonly privilegeService: PrivilegeService) {}

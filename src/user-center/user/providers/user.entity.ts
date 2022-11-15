@@ -32,6 +32,9 @@ export class User {
   @Column({ nullable: true })
   role_id: string; // 用户角色
 
+  @Column({ nullable: true })
+  openid: string;
+
   @Column({ default: UserStatus.enabled })
   status?: UserStatus;
 

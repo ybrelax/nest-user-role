@@ -91,7 +91,11 @@ export class UserService {
     });
   }
 
-  async saveUser(user: User) {
+  getUserByOpenid(openid: string) {
+    return this.userRepository.findOne({ where: { openid } });
+  }
+
+  async saveUser(user: Partial<User>) {
     return this.userRepository.save(user);
   }
 

@@ -33,6 +33,6 @@ async function bootstrap() {
     secret: 'my-secret', // for cookies signature
   });
 
-  await app.listen(3000);
+  await app.listen(80);
 }
 bootstrap();

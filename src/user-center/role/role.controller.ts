@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PrivilegeService } from '../privilege/privilege.service';
 import { RolePrivilegeService } from '../role-privilege/role-privilege.service';
 import {
@@ -11,6 +12,7 @@ import {
 } from './providers/role.dto';
 import { RoleService } from './role.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('role')
 export class RoleController {
   constructor(
