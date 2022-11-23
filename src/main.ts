@@ -29,6 +29,9 @@ async function bootstrap() {
   // 开启全局校验
   app.useGlobalPipes(new ValidationPipe());
 
+  // 设置请求前缀
+  app.setGlobalPrefix('api', { exclude: ['*'] });
+
   app.register(fastifyCookie, {
     secret: 'my-secret', // for cookies signature
   });

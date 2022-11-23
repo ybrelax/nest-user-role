@@ -1,5 +1,6 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Roles, RolesGuard } from 'src/auth/guards/role-auth.guard';
 import { BusinessException } from 'src/common/exceptions/business.exception';
 import { UserRoleService } from '../user-role/user-role.service';
 import {
@@ -11,7 +12,6 @@ import {
 } from './providers/user.dto';
 import { UserService } from './user.service';
 
-@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(
@@ -25,6 +25,8 @@ export class UserController {
   }
 
   @Post('register')
+  @Roles('admin', 'root')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   register(@Body() createUser: CreateUserDto) {
     return this.userService.register(createUser);
   }

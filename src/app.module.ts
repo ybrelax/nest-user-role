@@ -6,6 +6,7 @@ import { PrivilegeModule } from './user-center/privilege/privilege.module';
 import { AuthModule } from './auth/auth.module';
 import { RolePrivilegeModule } from './user-center/role-privilege/role-privilege.module';
 import { getConfig } from './utils';
+import { IntercepterModule } from './core/intercepter.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { getConfig } from './utils';
     PrivilegeModule,
     AuthModule,
     RolePrivilegeModule,
+    IntercepterModule,
   ],
 })
 export class AppModule {}
